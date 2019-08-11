@@ -10,6 +10,8 @@ import songsApp from './reducers/reducers'
 import {
 	addSong
 } from './actions/actions'
+import { AddSongComponent } from './components/AddSongDialog'
+
 
 // material ui
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,13 +34,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 class App extends React.Component {
+
+  classes() {
+    return useStyles()
+  }
 	
 	constructor(props) {
 		super(props);
 		this.store = createStore(songsApp)
 		console.log(this.store.getState())
 		this.unsubscribe = this.store.subscribe(() => console.log(this.store.getState()))	
-    //this.classes = useStyles()
 	}
 
 	dispatchTests() {
@@ -62,33 +67,40 @@ class App extends React.Component {
 	render() {
 		this.dispatchTests()
 		return (
-			<Paper>
-				<Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Song</TableCell>
-              <TableCell align="right">Artist</TableCell>
-              <TableCell align="right">Difficulty</TableCell>
-              <TableCell align="right">Progress</TableCell>
-              <TableCell align="right">Resources</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {this.store.getState().songs.map(song => (
-              <TableRow key={song.name}>
-                <TableCell component="th" scope="row">
-                  {song.name}
-                </TableCell>
-                <TableCell align="right">{song.artist}</TableCell>
-                <TableCell align="right">{song.difficulty}</TableCell>
-                <TableCell align="right">{song.progress}</TableCell>
-                <TableCell align="right">{song.resources}</TableCell>
+      <div>
+        <Paper className={this.classes().root}>
+          <Table className={this.classes().table}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Song</TableCell>
+                <TableCell align="right">Artist</TableCell>
+                <TableCell align="right">Difficulty</TableCell>
+                <TableCell align="right">Progress</TableCell>
+                <TableCell align="right">Resources</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-			</Paper>
-		)
+            </TableHead>
+            <TableBody>
+              {this.store.getState().songs.map(song => (
+                <TableRow key={song.name}>
+                  <TableCell component="th" scope="row">
+                    {song.name}
+                  </TableCell>
+                  <TableCell align="right">{song.artist}</TableCell>
+                  <TableCell align="right">{song.difficulty}</TableCell>
+                  <TableCell align="right">{song.progress}</TableCell>
+                  <TableCell align="right">
+                    <a href={song.resources} rel="noopener noreferrer" target="_blank">{song.resources}</a>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+        <div style={{display: 'block', textAlign: 'center',  marginTop: 20 + 'px'}}>
+          <AddSongComponent />
+        </div>
+	    </div>
+  	)
 	}
 }
 
