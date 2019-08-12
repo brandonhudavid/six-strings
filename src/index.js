@@ -11,33 +11,9 @@ import {
 	addSong
 } from './actions/actions'
 import { AddSongComponent } from './components/AddSongDialog'
-
-
-// material ui
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing(3),
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 650,
-  },
-}));
+import { SongsTable } from './components/SongsTable'
 
 class App extends React.Component {
-
-  classes() {
-    return useStyles()
-  }
 	
 	constructor(props) {
 		super(props);
@@ -68,34 +44,7 @@ class App extends React.Component {
 		this.dispatchTests()
 		return (
       <div>
-        <Paper className={this.classes().root}>
-          <Table className={this.classes().table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Song</TableCell>
-                <TableCell align="right">Artist</TableCell>
-                <TableCell align="right">Difficulty</TableCell>
-                <TableCell align="right">Progress</TableCell>
-                <TableCell align="right">Resources</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.store.getState().songs.map(song => (
-                <TableRow key={song.name}>
-                  <TableCell component="th" scope="row">
-                    {song.name}
-                  </TableCell>
-                  <TableCell align="right">{song.artist}</TableCell>
-                  <TableCell align="right">{song.difficulty}</TableCell>
-                  <TableCell align="right">{song.progress}</TableCell>
-                  <TableCell align="right">
-                    <a href={song.resources} rel="noopener noreferrer" target="_blank">{song.resources}</a>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
+        <SongsTable songs={this.store.getState().songs} />
         <div style={{display: 'block', textAlign: 'center',  marginTop: 20 + 'px'}}>
           <AddSongComponent />
         </div>
