@@ -19,12 +19,14 @@ export default function MetricListMenu(props) {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const { onChange } = props
 
   function handleClickListItem(event) {
     setAnchorEl(event.currentTarget);
   }
 
-  function handleMenuItemClick(event, index) {
+  function handleMenuItemClick(index, option) {
+    onChange(option)
     setSelectedIndex(index);
     setAnchorEl(null);
   }
@@ -57,7 +59,7 @@ export default function MetricListMenu(props) {
           <MenuItem
             key={option}
             selected={index === selectedIndex}
-            onClick={event => handleMenuItemClick(event, index)}
+            onClick={event => handleMenuItemClick(index, option)}
           >
             {option}
           </MenuItem>

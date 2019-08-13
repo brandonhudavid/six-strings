@@ -46,7 +46,7 @@ class App extends React.Component {
       <div>
         <SongsTable songs={this.store.getState().songs} />
         <div style={{display: 'block', textAlign: 'center',  marginTop: 20 + 'px'}}>
-          <AddSongComponent />
+          <AddSongComponent store={this.store} />
         </div>
 	    </div>
   	)
@@ -55,3 +55,4 @@ class App extends React.Component {
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
+
