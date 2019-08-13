@@ -41,7 +41,7 @@ class App extends React.Component {
 	}
 	
 	render() {
-		this.dispatchTests()
+	    this.dispatchTests()
 		return (
       <div>
         <SongsTable songs={this.store.getState().songs} />
