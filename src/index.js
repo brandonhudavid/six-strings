@@ -13,12 +13,17 @@ import {
 import { AddSongComponent } from './components/AddSongDialog'
 import { SongsTable } from './components/SongsTable'
 
+// react-redux
+import { connect } from 'react-redux'
+
 class App extends React.Component {
 	
 	constructor(props) {
 		super(props);
 		this.store = createStore(songsApp)
-		console.log(this.store.getState())
+		this.state = {
+		  songs: this.store.getState().songs
+		}
 		this.unsubscribe = this.store.subscribe(() => console.log(this.store.getState()))	
 	}
 
@@ -52,6 +57,15 @@ class App extends React.Component {
   	)
 	}
 }
+
+function mapStateToProps(state) {
+  console.log('mapStateToProps called')
+  return {
+    songs: state.songs
+  }
+}
+
+export default connect(mapStateToProps)(App)
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
