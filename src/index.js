@@ -10,49 +10,66 @@ import songsApp from './reducers/reducers'
 import {
 	addSong
 } from './actions/actions'
-import { AddSongComponent } from './components/AddSongDialog'
-import { SongsTable } from './components/SongsTable'
+import AddSongComponent from './components/AddSongDialog'
+import SongsTable from './components/SongsTable'
+import { 
+  Provider,
+  connect
+ } from 'react-redux'
+
+const store = createStore(songsApp)
+store.dispatch(addSong({
+  name: 'Give Love A Try',
+  artist: 'Nick Jonas',
+  difficulty: 'easy',
+  progress: 'finished',
+  resources: 'https://www.youtube.com/watch?v=frxXGvMpgdg'
+}))
+store.dispatch(addSong({
+  name: 'Safe and Sound',
+  artist: 'Taylor Swift',
+  difficulty: 'medium',
+  progress: 'finished',
+  resources: 'https://www.youtube.com/watch?v=Hhdo_mXqltM'
+}))
+
+
 
 class App extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		this.store = createStore(songsApp)
-		console.log(this.store.getState())
-		this.unsubscribe = this.store.subscribe(() => console.log(this.store.getState()))	
+		this.unsubscribe = store.subscribe(() => console.log(store.getState()))	
 	}
 
-	dispatchTests() {
-		// dispatch tests
-		this.store.dispatch(addSong({
-			name: 'Give Love A Try',
-			artist: 'Nick Jonas',
-			difficulty: 'easy',
-			progress: 'finished',
-			resources: 'https://www.youtube.com/watch?v=frxXGvMpgdg'
-		}))
-		this.store.dispatch(addSong({
-			name: 'Safe and Sound',
-			artist: 'Taylor Swift',
-			difficulty: 'medium',
-			progress: 'finished',
-			resources: 'https://www.youtube.com/watch?v=Hhdo_mXqltM'
-		}))
-	}
 	
 	render() {
-	    this.dispatchTests()
 		return (
-      <div>
-        <SongsTable songs={this.store.getState().songs} />
-        <div style={{display: 'block', textAlign: 'center',  marginTop: 20 + 'px'}}>
-          <AddSongComponent store={this.store} />
-        </div>
-	    </div>
+        <>
+          <SongsTable />
+          <div style={{display: 'block', textAlign: 'center',  marginTop: 20 + 'px'}}>
+            <AddSongComponent />
+          </div>
+        </>
   	)
 	}
 }
 
 const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+console.log('store:', store)
+console.log('store state:', store.getState())
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  rootElement);
+
+store.dispatch(addSong({
+  name: 'Safe and Sound2',
+  artist: 'Taylor Swift2',
+  difficulty: 'medium',
+  progress: 'finished',
+  resources: 'https://www.youtube.com/watch?v=Hhdo_mXqltM'
+}))
+console.log('dispatched another one')
 

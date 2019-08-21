@@ -16,6 +16,9 @@ import {
 	addSong
 } from '../actions/actions'
 
+// react-redux
+import { connect } from 'react-redux'
+
 const useStyles = makeStyles(theme => ({
   textField: {
     marginLeft: theme.spacing(1),
@@ -28,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function AddSongDialog(props) {
-  const { onClose, open, store } = props
+  const { onClose, open } = props
   const [ songName, setSongName ] = React.useState('')
   const [ artist, setArtist ] = React.useState('')
   const [ difficulty, setDifficulty ] = React.useState('')
@@ -72,7 +75,7 @@ function AddSongDialog(props) {
   function addSongClicked() {
     if (songName && artist && difficulty && progress && resources) {
       console.log("dispatching:", songName, artist, difficulty, progress, resources)
-      store.dispatch(addSong({
+      props.dispatch(addSong({
         name: songName,
         artist: artist,
         difficulty: difficulty,
@@ -157,7 +160,8 @@ function AddSongDialog(props) {
 
 export function AddSongComponent(props) {
   const [open, setOpen] = React.useState(false)
-  const store = props.store
+  //const store = props.store
+  console.log('AddsongComponent props:', props)
   
   function handleClickOpen() {
     setOpen(true)
@@ -172,10 +176,10 @@ export function AddSongComponent(props) {
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         Add new song
       </Button>
-      <AddSongDialog open={open} onClose={handleClose} store={store} />
+      <AddSongDialog open={open} onClose={handleClose} dispatch={props.dispatch} />
     </div>
   )
 }
 
-export default AddSongComponent;
+export default connect()(AddSongComponent)
 
