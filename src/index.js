@@ -64,12 +64,3 @@ ReactDOM.render(
   </Provider>,
   rootElement);
 
-store.dispatch(addSong({
-  name: 'Safe and Sound2',
-  artist: 'Taylor Swift2',
-  difficulty: 'medium',
-  progress: 'finished',
-  resources: 'https://www.youtube.com/watch?v=Hhdo_mXqltM'
-}))
-console.log('dispatched another one')
-

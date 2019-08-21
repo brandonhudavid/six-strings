@@ -38,8 +38,22 @@ function AddSongDialog(props) {
   const [ progress, setProgress ] = React.useState('')
   const [ resources, setResources ] = React.useState('')
   const classes = useStyles()
+
+  React.useEffect(() => {
+    if (difficulty == '') {
+      setDifficulty('Medium')
+    }
+    if (progress == '') {
+      setProgress('In Progress')
+    }
+  })
   
   function handleClose() {
+    setSongName('')
+    setArtist('')
+    setDifficulty('')
+    setProgress('')
+    setResources('')
     onClose()
   }
 

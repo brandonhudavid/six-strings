@@ -68,8 +68,7 @@ export function SongsTable(props) {
    )
 }
 
-const mapStateToProps = function(state) {
-  console.log('mapStateToProps state:', state)
+const mapStateToProps = state => {
   return {
     songs: state.songs
   }
