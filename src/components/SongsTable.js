@@ -7,9 +7,15 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 // react-redux
 import { connect } from 'react-redux'
+
+import {
+  removeSong
+} from '../actions/actions'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,13 +26,18 @@ const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 650,
   },
+  icon: {
+    margin: theme.spacing(1),
+    fontSize: 24,
+  },
 }));
 
-function mapSongs(songs) {
-  if (songs) {
+function mapSongs(props, classes) {
+  console.log('mapSongs called')
+  if (props.songs) {
     return (
       <TableBody>
-      {songs.map(song => (
+      {props.songs.map(song => (
         <TableRow key={song.name}>
           <TableCell component="th" scope="row">
             {song.name}
@@ -34,9 +45,10 @@ function mapSongs(songs) {
           <TableCell align="right">{song.artist}</TableCell>
           <TableCell align="right">{song.difficulty}</TableCell>
           <TableCell align="right">{song.progress}</TableCell>
+          <TableCell align="right">{song.resources}</TableCell>
           <TableCell align="right">
-            <a href={song.resources} rel="noopener noreferrer" target="_blank">{song.resources}</a>
-          </TableCell>
+            <DeleteIcon onClick={() => props.dispatch(removeSong(song.id))}  className={classes.icon} />
+         </TableCell>
         </TableRow>
       ))}
       </TableBody>
@@ -60,15 +72,18 @@ export function SongsTable(props) {
               <TableCell align="right">Difficulty</TableCell>
               <TableCell align="right">Progress</TableCell>
               <TableCell align="right">Resources</TableCell>
+              <TableCell align="right" />
             </TableRow>
           </TableHead>
-          {mapSongs(props.songs)}
+          {mapSongs(props, classes)}
         </Table>
       </Paper>
    )
 }
 
 const mapStateToProps = state => {
+  console.log('mapStateToProps called')
+  console.log('state.songs:', state.songs)
   return {
     songs: state.songs
   }

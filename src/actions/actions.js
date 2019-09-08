@@ -11,3 +11,10 @@ export function addSong(song) {
 	}
 }
 
+export function removeSong(id) {
+  return {
+    type: REMOVE_SONG,
+    id: id
+  }
+}
+

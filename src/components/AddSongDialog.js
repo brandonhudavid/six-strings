@@ -10,6 +10,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import { blue } from '@material-ui/core/colors';
 import TextField from '@material-ui/core/TextField'
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 
 import MetricListMenu from './MetricListMenu.js'
 import {
@@ -18,6 +22,9 @@ import {
 
 // react-redux
 import { connect } from 'react-redux'
+
+// lodash uniqueId
+import { uniqueId } from 'lodash'
 
 const useStyles = makeStyles(theme => ({
   textField: {
@@ -37,6 +44,8 @@ function AddSongDialog(props) {
   const [ difficulty, setDifficulty ] = React.useState('')
   const [ progress, setProgress ] = React.useState('')
   const [ resources, setResources ] = React.useState('')
+  const [ inputErr, setInputErr ] = React.useState(false)
+  const [ onPopup, setOnPopup ] = React.useState(true)
   const classes = useStyles()
 
   React.useEffect(() => {
@@ -54,7 +63,20 @@ function AddSongDialog(props) {
     setDifficulty('')
     setProgress('')
     setResources('')
+    setOnPopup(true)
     onClose()
+  }
+
+  function songNameErr() {
+    if (!onPopup) return songName ? null : true
+  }
+
+  function artistErr() {
+    if (!onPopup) return artist ? null : true
+  }
+
+  function resourcesErr() {
+    if (!onPopup) return resources ? null : true
   }
 
   function handleTextFieldChange(e) {
@@ -87,9 +109,11 @@ function AddSongDialog(props) {
 
 
   function addSongClicked() {
+    setOnPopup(false)
     if (songName && artist && difficulty && progress && resources) {
       console.log("dispatching:", songName, artist, difficulty, progress, resources)
       props.dispatch(addSong({
+        id: uniqueId(),
         name: songName,
         artist: artist,
         difficulty: difficulty,
@@ -99,6 +123,7 @@ function AddSongDialog(props) {
       handleClose()
     } else {
       console.log("not dispatching:", songName, artist, difficulty, progress, resources)
+      setInputErr(true)
     }
   }
 
@@ -107,25 +132,27 @@ function AddSongDialog(props) {
       <DialogTitle id="simple-dialog-title">Add new song</DialogTitle>
         <List>
           <ListItem>
-            <TextField
-              id="song-name"
-              label="Song"
-              className={classes.textField}
-              placeholder="Song"
-              margin="normal"
-              onChange={handleTextFieldChange}
-            />
-          </ListItem>
-          <ListItem>
-              <TextField
-                id="artist"
-                label="Artist"
-                className={classes.textField}
-                placeholder="Artist"
-                margin="normal"
+            <FormControl error={songNameErr()} className={classes.textField}>
+              <InputLabel htmlFor="component-error">Song</InputLabel>
+              <Input
+                id="song-name"
+                value={songName}
                 onChange={handleTextFieldChange}
               />
-            </ListItem>
+              {songNameErr() ? <FormHelperText>Provide a song name.</FormHelperText> : null}
+            </FormControl>
+          </ListItem>
+          <ListItem>
+            <FormControl error={artistErr()} className={classes.textField}>
+              <InputLabel htmlFor="component-error">Artist</InputLabel>
+              <Input
+                id="artist"
+                value={artist}
+                onChange={handleTextFieldChange}
+              />
+              {artistErr() ? <FormHelperText>Provide an artist.</FormHelperText> : null}
+            </FormControl>
+          </ListItem>
           <div style={{display: 'block', textAlign: 'left'}}>
             <div style={{display: 'inline-block'}}>
               <MetricListMenu
@@ -143,17 +170,18 @@ function AddSongDialog(props) {
                 onChange={handleProgressChange}
               />
             </div>
-            <TextField
-              id="resources"
-              label="Resources"
-              placeholder="Add resources here..."
-              multiline
-              className={classes.textField}
-              style={{width: '98%'}}
-              margin="normal"
-              variant="outlined"
-              onChange={handleTextFieldChange}
-            />
+          </div>
+          <ListItem>
+            <FormControl error={resourcesErr()} className={classes.textField}>
+              <InputLabel htmlFor="component-error">Resources</InputLabel>
+              <Input multiline
+                id="resources"
+                value={resources}
+                onChange={handleTextFieldChange}
+              />
+              {resourcesErr() ? <FormHelperText>Provide a resource.</FormHelperText> : null}
+            </FormControl>
+          </ListItem>
             <div style={{display: 'block', textAlign: 'right'}}>
               <div style={{display: 'inline-block'}}>
                 <Button variant="contained" color="primary" className={classes.button} onClick={()=>addSongClicked()}>
@@ -166,7 +194,6 @@ function AddSongDialog(props) {
                 </Button>
               </div>
             </div>
-          </div>
         </List>
    </Dialog>
   )

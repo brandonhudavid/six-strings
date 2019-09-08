@@ -19,17 +19,19 @@ import {
 
 const store = createStore(songsApp)
 store.dispatch(addSong({
+  id: '-1',
   name: 'Give Love A Try',
   artist: 'Nick Jonas',
-  difficulty: 'easy',
-  progress: 'finished',
+  difficulty: 'Easy',
+  progress: 'Finished',
   resources: 'https://www.youtube.com/watch?v=frxXGvMpgdg'
 }))
 store.dispatch(addSong({
+  id: '0',
   name: 'Safe and Sound',
   artist: 'Taylor Swift',
-  difficulty: 'medium',
-  progress: 'finished',
+  difficulty: 'Medium',
+  progress: 'Finished',
   resources: 'https://www.youtube.com/watch?v=Hhdo_mXqltM'
 }))
 

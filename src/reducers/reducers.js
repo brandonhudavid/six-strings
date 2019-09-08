@@ -15,6 +15,16 @@ export default function songsApp(state=initialState, action) {
 				...state,
 				songs: [...state.songs, action.song]
 			}
+    case REMOVE_SONG:
+      var stateClone = {...state}
+      var i
+      for (i=0; i<stateClone.songs.length; i++) {
+        if (stateClone.songs[i].id == action.id) {
+          stateClone.songs.splice(i, 1)
+          break
+        }
+      }
+      return stateClone
 		default:
 			return state
 	}
